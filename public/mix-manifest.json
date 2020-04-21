@@ -1,4 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/css/rtc_scheduler.css": "/css/rtc_scheduler.css",
+    "/js/rtc_scheduler.js": "/js/rtc_scheduler.js"
 }
