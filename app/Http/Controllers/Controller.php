@@ -10,4 +10,12 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    public function scheduler()
+    {
+        return view('rtc_scheduler_view');
+    }
+    public function simulator()
+    {
+        return view('rtc_simulator_view');
+    }
 }

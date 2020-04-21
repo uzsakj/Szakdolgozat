@@ -20,3 +20,5 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/scheduler', 'Controller@scheduler')->name('rtc_scheduler_view');
+Route::get('/simulator', 'Controller@simulator')->name('rtc_simulator_view');
