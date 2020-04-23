@@ -15,7 +15,10 @@ class CreateWagonsTable extends Migration
     {
         Schema::create('wagons', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->integer('station_id')->nullable();
+            $table->integer('train_id')->nullable();
+            $table->integer('type_id');
+            $table->integer('capacity');
         });
     }
 

@@ -18,7 +18,8 @@ class CreateOrdersTable extends Migration
             $table->string('ordered_products');
             $table->integer('ordered_quantities');
             $table->timestamps();
-            $table->date('deadline');
+            $table->date('deadline');           
+            $table->integer('starting_station_id');
             $table->integer('destination_station_id');
         });
     }
