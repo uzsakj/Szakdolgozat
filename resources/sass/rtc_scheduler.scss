@@ -18,7 +18,7 @@ body {
 /* drag container */
 #redips-drag {
 	margin: auto;
-	width: 530px;
+	width: 80%;
 }
 
 /* set border for images inside DRAG region - exclude image margin inheritance */
@@ -65,7 +65,7 @@ body {
 /* allow / deny access to cells marked with 'mark' class name */
 .redips-mark {
 	color: white;
-	background-color: #9B9EA2;
+	background-color: #aaaaaa;
 }
 /* trash cell */
 .redips-trash {
