@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -101,9 +101,7 @@ window.Selector = function () {
     var mm = String(ymd[1]).padStart(2, '0');
     var yyyy = ymd[0];
     return new Date(yyyy, mm, dd);
-  }
-
-  function formatDate(date) {} //calculate diff in days
+  } //calculate diff in days
 
 
   function datediff(first, second) {
@@ -111,11 +109,15 @@ window.Selector = function () {
   } //constucting todays date
 
 
-  var today = new Date();
-  var dd = String(today.getDate()).padStart(2, '0');
-  var mm = String(today.getMonth() + 1).padStart(2, '0');
-  var yyyy = today.getFullYear();
-  today = yyyy + '-' + mm + '-' + dd;
+  function getToday() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+    today = yyyy + '-' + mm + '-' + dd;
+    return today;
+  }
+
   var str = ""; //increment date
 
   function dateincrement(inputdate, daystoadd) {
@@ -130,44 +132,115 @@ window.Selector = function () {
 
   $("select option:selected").each(function () {
     str += $(this).text() + " ";
-    var timeLine = "<td class='redips-mark'>Timeline</td>";
-    $("#t1").append(timeLine);
     $.post("/scheduler/order/" + this.value, {
       '_token': $('meta[name=csrf-token]').attr('content')
     }).done(function (data) {
-      console.log(data);
-      var overlap = 0;
-      var deadline = new Date();
-      deadline = data['deadline'];
-      var diffDays = datediff(parseDate(today), parseDate(deadline));
+      var station = data['destination_station_id'];
+      var ordered_types = data['ordered_products'];
+      ordered_types = ordered_types.split(',');
+      var ordered_quantities = data['ordered_quantities'];
+      ordered_quantities = ordered_quantities.split(',');
+      var deadline = data['deadline'];
+      $("#starting_station_id").replaceAll("");
+      $("#starting_station_id").append(data['starting_station_id']); //console.log($("#starting_station_id").text());
 
-      if (document.getElementById($("#t1").find('td').last().attr("id")) != null) {
-        var lastDate = document.getElementById($("#t1").find('td').last().attr("id")).innerText;
-        console.log(datediff(parseDate(lastDate), parseDate(deadline)));
-        overlap = datediff(parseDate(lastDate), parseDate(deadline));
-      } //deleting eyisting columns before insert
+      var diffDays = datediff(parseDate(getToday()), parseDate(deadline)); //deleting cells from previous orders
 
+      $("#table1").find('td').each(function () {
+        if ($(this).attr('id') != "cim") {
+          $(this).remove();
+        }
+      }); //hideing all rows
 
-      $("#t1").find('td').each(function () {
-        $(this).remove();
-      });
+      $("#table1").find('tr').each(function () {
+        $(this).hide();
+      }); //showing only the necessery row
+
+      $("#table1").find('tr').each(function () {
+        if ($(this).attr('id') == "station" + station || $(this).attr('id') == "timeline") {
+          $(this).show();
+        }
+
+        for (var i = 0; i < ordered_types.length; i++) {
+          if ($(this).attr('id') == "type" + ordered_types[i]) {
+            $(this).show();
+          }
+        }
+      }); //filling
 
       for (var i = 0; i <= diffDays; i++) {
-        //create column to be inserted
-        var nl = "<td id=column" + (i + 1) + " class='redips-mark'>" + dateincrement(today, i) + "</td>"; //insert column
+        var nl = "<td id=timelinecolumn" + (i + 1) + " class='redips-mark'>" + dateincrement(getToday(), i) + "</td>";
+        $("#timeline").append(nl);
+        var nl = "<td id=stationcolumn" + (i + 1) + "></td>";
+        $("#station" + station).append(nl);
 
-        $("#t1").append(nl);
+        for (var j = 0; j < ordered_types.length; j++) {
+          var nl = "<td id=type" + ordered_types[j] + "column" + (i + 1) + "></td>";
+          $("#type" + ordered_types[j]).append(nl);
+        }
+      } //adding order cells
+
+
+      for (var j = 0; j < ordered_types.length; j++) {
+        $("#type" + ordered_types[j] + "column1").append("<div id=" + ordered_types[j] + "_" + ordered_quantities[j] + " class='redips-drag'>" + ordered_quantities[j] + "</div>");
       }
 
-      console.log(document.getElementById($("#t1").find('td').last().attr("id")).innerText);
+      window.REDIPS.drag.init();
     });
   });
-  document.getElementById("demo").innerHTML = str;
+};
+
+window.processShipment = function () {
+  var starting_station_id = $("#starting_station_id").text(); //console.log(starting_station_id);
+
+  var wagons = [];
+  $.post("/scheduler/wagon/" + starting_station_id, {
+    '_token': $('meta[name=csrf-token]').attr('content')
+  }).done(function (data) {
+    console.log(Object.keys(data));
+    Object.keys(data).forEach(function (item) {
+      //console.log(data[item]['type_id']);
+      var temp = data[item]['id'] + "_" + data[item]["type_id"] + "_" + data[item]['capacity'];
+      wagons.push(temp);
+    }); //console.log(wagons);
+
+    var temp = window.REDIPS.drag.saveContent('table1', 'plain').split('&');
+
+    for (var i = 0; i < temp.length; i++) {
+      temp[i] = temp[i].split('=')[1];
+    }
+
+    var temp1 = $("#table1 tr");
+    var ordered_types = [];
+    var ordered_quantities = [];
+
+    for (var i = 0; i < temp.length; i++) {
+      ordered_types.push(temp[i].split('_')[0]);
+      ordered_quantities.push(temp[i].split('_')[1]);
+    } // console.log(ordered_types);
+    //console.log(ordered_quantities);
+
+
+    var wagons_needed = [];
+
+    for (var i = 0; i < ordered_types.length; i++) {
+      var quantity_needed = ordered_quantities[i];
+
+      for (var j = 0; j < wagons.length; j++) {
+        if (ordered_types[i] == wagons[j].split('_')[1] && quantity_needed > 0) {
+          wagons_needed.push(wagons[j].split('_')[0]);
+          quantity_needed = quantity_needed - wagons[j].split('_')[2];
+        }
+      }
+    }
+
+    console.log(wagons_needed);
+  }); //console.log(temp1);
 };
 
 /***/ }),
 
-/***/ 3:
+/***/ 2:
 /*!****************************************!*\
   !*** multi ./resources/js/selector.js ***!
   \****************************************/

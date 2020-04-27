@@ -12,7 +12,6 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-   .js('resources/js/rtc_scheduler.js', 'public/js')
    .js('resources/js/ddm.js', 'public/js')
    .js('resources/js/selector.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css')

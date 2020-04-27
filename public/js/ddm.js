@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -99,7 +99,7 @@ $(document).ready(function () {
 
 /***/ }),
 
-/***/ 2:
+/***/ 1:
 /*!***********************************!*\
   !*** multi ./resources/js/ddm.js ***!
   \***********************************/
