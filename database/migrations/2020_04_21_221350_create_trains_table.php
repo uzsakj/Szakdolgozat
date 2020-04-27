@@ -18,6 +18,7 @@ class CreateTrainsTable extends Migration
             $table->string('wagon_ids');
             $table->integer('pos_x');
             $table->integer('pos_y');
+            $table->timestamps();
         });
     }
 
