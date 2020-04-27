@@ -157,6 +157,9 @@ window.processShipment = function () {
 
         }
         console.log(wagons_needed);
+        $.post("/scheduler/create_train/" + wagons_needed, { '_token': $('meta[name=csrf-token]').attr('content') }).done(function (data) {
+            console.log(data);
+        });
     });
 
 

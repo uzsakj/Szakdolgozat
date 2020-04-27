@@ -13,6 +13,7 @@ use App\Stations;
 use App\Orders;
 use App\Wagon;
 use App\Routes;
+use App\Train;
 
 class Controller extends BaseController
 {
@@ -34,9 +35,17 @@ class Controller extends BaseController
     {
         return Wagon::all()->where('station_id',$station_id);
     }
-    public function create_train(Request $request)
+    public function create_train(Request $request,$wagon_ids)
     {
-        
+
+        $train=Train::create([
+            'wagon_ids' => $wagon_ids,
+            'pos_x' => 1,
+            'pos_y' => 1,
+        ]);
+ 
+        return $train;
+
     }
     public function create_shipment(Request $request)
     {
