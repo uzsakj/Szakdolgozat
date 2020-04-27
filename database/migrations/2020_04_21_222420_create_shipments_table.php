@@ -21,7 +21,7 @@ class CreateShipmentsTable extends Migration
             $table->integer('time-span');
             $table->date('departure');
             $table->string('status');
-            $table->integer('creator_od');
+            $table->integer('creator_id');
         });
     }
 
