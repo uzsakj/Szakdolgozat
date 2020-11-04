@@ -85,6 +85,30 @@ body {
   background-color: #aaaaaa;
 }
 
+.type1 {
+  color: black;
+  border-color: blue;
+  background-color: lightblue;
+}
+
+.type2 {
+  color: black;
+  border-color: red;
+  background-color: pink;
+}
+
+.type3 {
+  color: black;
+  border-color: green;
+  background-color: lightgreen;
+}
+
+.type4 {
+  color: black;
+  border-color: purple;
+  background-color: #ac6cac;
+}
+
 /* trash cell */
 
 .redips-trash {
@@ -124,6 +148,14 @@ div#redips-drag td {
   border: 1px solid white;
   text-align: center;
   font-size: 10pt;
+  padding: 2px;
+}
+
+div#redips-drag th {
+  height: 32px;
+  border: 1px solid white;
+  text-align: center;
+  font-size: 9pt;
   padding: 2px;
 }
 

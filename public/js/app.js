@@ -49946,9 +49946,9 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\József\Desktop\Szakdolgozat\Szakdolgozat\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! C:\Users\József\Desktop\Szakdolgozat\Szakdolgozat\resources\sass\app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! C:\Users\József\Desktop\Szakdolgozat\Szakdolgozat\resources\sass\rtc_scheduler.scss */"./resources/sass/rtc_scheduler.scss");
+__webpack_require__(/*! C:\Users\József\Desktop\Szakdolgozat\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! C:\Users\József\Desktop\Szakdolgozat\resources\sass\app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! C:\Users\József\Desktop\Szakdolgozat\resources\sass\rtc_scheduler.scss */"./resources/sass/rtc_scheduler.scss");
 
 
 /***/ })
