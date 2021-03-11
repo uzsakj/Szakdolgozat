@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Orders;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,6 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         $this->call(Orders::class);
+         $this->call([
+            StationSeeder::class,
+            SectionSeeder::class
+            ]);
     }
 }
