@@ -15,7 +15,7 @@ class CreateSections extends Migration
     {
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
-            $table->string('stations');
+            $table->string('points',12000);
             $table->timestamps();
         });
     }

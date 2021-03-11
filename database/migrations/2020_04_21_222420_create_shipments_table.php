@@ -22,6 +22,7 @@ class CreateShipmentsTable extends Migration
             $table->date('departure');
             $table->string('status');
             $table->integer('creator_id');
+            $table->timestamps();
         });
     }
 
