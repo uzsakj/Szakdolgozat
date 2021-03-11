@@ -16,8 +16,6 @@ class Shipment extends Model
         'departure',
         'status',
         'creator_id',
-        'created_at',
-        'updated_at',
     ];
 
 }

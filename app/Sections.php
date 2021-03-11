@@ -9,6 +9,8 @@ class Sections extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'id',
-        'stations',
+        'points',
+        'lon',
+        'lat',
     ];
 }

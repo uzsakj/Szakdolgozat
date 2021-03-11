@@ -8,5 +8,5 @@ class Stations extends Model
 {
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id','name','coordinate_x','coordinate_y'];
+        'id','name','longitude','latitude'];
 }
