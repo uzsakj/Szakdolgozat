@@ -2,6 +2,12 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/css/rtc_scheduler.css": "/css/rtc_scheduler.css",
+    "/css/rtc_simulator.css": "/css/rtc_simulator.css",
     "/js/ddm.js": "/js/ddm.js",
+    "/js/drag.js": "/js/drag.js",
+    "/js/fill_table.js": "/js/fill_table.js",
+    "/js/load_order.js": "/js/load_order.js",
+    "/js/map.js": "/js/map.js",
+    "/js/process_shipment.js": "/js/process_shipment.js",
     "/js/selector.js": "/js/selector.js"
 }

@@ -81,32 +81,30 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./resources/js/ddm.js":
-/*!*****************************!*\
-  !*** ./resources/js/ddm.js ***!
-  \*****************************/
+/***/ "./resources/js/fill_order.js":
+/*!************************************!*\
+  !*** ./resources/js/fill_order.js ***!
+  \************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-$(document).ready(function () {
-  $('.orders').select2();
-});
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open 'C:\\Users\\József\\Desktop\\Szakdolgozat\\resources\\js\\fill_order.js'");
 
 /***/ }),
 
-/***/ 1:
-/*!***********************************!*\
-  !*** multi ./resources/js/ddm.js ***!
-  \***********************************/
+/***/ 4:
+/*!******************************************!*\
+  !*** multi ./resources/js/fill_order.js ***!
+  \******************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\József\Desktop\Szakdolgozat\resources\js\ddm.js */"./resources/js/ddm.js");
+module.exports = __webpack_require__(/*! C:\Users\József\Desktop\Szakdolgozat\resources\js\fill_order.js */"./resources/js/fill_order.js");
 
 
 /***/ })

@@ -14,5 +14,11 @@ const mix = require('laravel-mix');
 mix.js('resources/js/app.js', 'public/js')
    .js('resources/js/ddm.js', 'public/js')
    .js('resources/js/selector.js', 'public/js')
+   .js('resources/js/map.js', 'public/js')
+   .js('resources/js/fill_table.js', 'public/js')
+   .js('resources/js/load_order.js', 'public/js')
+   .js('resources/js/drag.js', 'public/js')
+   .js('resources/js/process_shipment.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css')
-   .sass('resources/sass/rtc_scheduler.scss', 'public/css');
+   .sass('resources/sass/rtc_scheduler.scss', 'public/css')
+   .sass('resources/sass/rtc_simulator.scss', 'public/css');

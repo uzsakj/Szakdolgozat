@@ -1,3 +1,6 @@
+let starting_station_id;
+let order_id;
+/*
 window.Selector = function () {
 
 
@@ -50,66 +53,39 @@ window.Selector = function () {
 
 
     $("select option:selected").each(function () {
-
-        $.post("/scheduler/order/" + this.value, { '_token': $('meta[name=csrf-token]').attr('content') }).done(function (data) {
+        order_id=this.value;
+        $.post("/scheduler/order/" + order_id, { '_token': $('meta[name=csrf-token]').attr('content') }).done(function (data) {          
             var station = data['destination_station_id'];
-            var starting_station_id= data['starting_station_id'];
+            starting_station_id = data['starting_station_id'];
             var ordered_types = data['ordered_products'];
             ordered_types = ordered_types.split(',');
             var ordered_quantities = data['ordered_quantities'];
             ordered_quantities = ordered_quantities.split(',');
             var deadline = data['deadline'];
-
-
-            $("#starting_station_id").text("induló állomás:" + data['starting_station_id']);
-            $("#order_id").text("Jelenleg betöltött rendeles:" + data['id']);
+            //console.log(data);
+            //console.log("állmoás: "+starting_station_id);
+            //$("#starting_station_id").text("induló állomás:" + data['starting_station_id']);
+            //$("#order_id").text("Jelenleg betöltött rendeles:" + data['id']);
             var diffDays = datediff(parseDate(getToday()), parseDate(deadline));
 
 
-            //deleting cells from previous orders
-            $("#table1").find('td').each(
-                function () {
-                    if ($(this).attr('id') != "cim") {
-                        $(this).remove();
-                    }
-
-                }
-            )
-            //hide all rows
-            $("#table1").find('tr').each(
-                function () {
-                    $(this).hide();
-                }
-            )
-
-            //showing only the necessery row
-            $("#table1").find('tr').each(
-                function () {
-                    if (($(this).attr('id') == ("station_" + station)) || ($(this).attr('id') == "timeline")) {
-                        $(this).show();
-                    }
-                    for (var i = 0; i < ordered_types.length; i++) {
-                        if (($(this).attr('id') == ("type_" + ordered_types[i]))) {
-                            $(this).show();
-                        }
-                        if (($(this).attr('id') == ("capacity_" + ordered_types[i]))) {
-                            $(this).show();
-                        }
-                    }
-                }
-            )
+        
             var types=[];
             for (var j = 0; j < ordered_types.length; j++) { types[j]="type"+ordered_types[j];}
 
-            console.log(types);
+            //console.log(types);
+            if(diffDays<1)
+            {
+                alert("A Rendelés már lejárt");
+            }
             //filling
-            for (var i = 0; i <= diffDays; i++) {
+            /*for (var i = 0; i <= diffDays; i++) {
                 var nl = "<td id=timeline_column" + (i + 1) + " class='redips-mark'>" + dateincrement(getToday(), i) + "</td>";
                 $("#timeline").append(nl);
                
-                var nl = "<td id=station_column" + (i + 1) + " class='redips-mark " +types+"'></td>";
+                var nl = "<td id=station_column" + (i + 1) + " class=' " +types+"'></td>";
                 $("#station_" + station).append(nl);
-
+                
                 for (var j = 0; j < ordered_types.length; j++) {
                     var nl = "<td id=type" + ordered_types[j] + "column" + (i + 1) + " class='redips-mark type"+ordered_types[j]+"'></td>";
                     $("#type_" + ordered_types[j]).append(nl);
@@ -118,16 +94,19 @@ window.Selector = function () {
                     var nl = "<td id=capacity" + ordered_types[j] + "column" + (i + 1) + " class='redips-mark'></td>";
                     $("#capacity_" + ordered_types[j]).append(nl);
                 }
-            }
-
+            }*/
             
+            /*
             //adding order cells
             for (var j = 0; j < ordered_types.length; j++) {
 
                 $("#type" + ordered_types[j] + "column1").append("<div id=" + ordered_types[j] + "_" + ordered_quantities[j] + " class='redips-drag type"+ordered_types[j]+"'>" + ordered_quantities[j] + "</div>");
             }
             //adding capacity
-            
+            //console.log("ssi:"+starting_station_id);
+            //console.log();
+*/
+/*
             $.post("/scheduler/wagon/" + starting_station_id, { '_token': $('meta[name=csrf-token]').attr('content') }).done(function (data) {
                 //console.log(Object.keys(data));
                 let wagons=[];
@@ -135,7 +114,7 @@ window.Selector = function () {
                     var temp = (data[item]["type_id"]);
                     wagons.push(temp);
                 })
-                console.log(wagons);
+                //console.log("wag:"+wagons);
                 for(let i=0;i<wagons.length;i++)
                 {
                     if(wagons[i]==1)
@@ -180,6 +159,7 @@ window.Selector = function () {
 
 
 };
+*/
 window.processShipment = function () {
     //parse date
     function parseDate(date) {
@@ -197,6 +177,7 @@ window.processShipment = function () {
 
     function shipment(wagons_needed,order_id,starting_station_id,destination_station_id,current_shippping_date,deadline){
         var time_span = datediff(parseDate(current_shippping_date), parseDate(deadline));
+        //console.log(time_span);
         $.post("/scheduler/create_train/" + wagons_needed, { '_token': $('meta[name=csrf-token]').attr('content') }).done(function (data) {
             var train_id;
             train_id = parseInt(data);
@@ -204,13 +185,16 @@ window.processShipment = function () {
                 $.post("/scheduler/wagon_paired/" + train_id, { '_token': $('meta[name=csrf-token]').attr('content'), 'wagon_id': wagons_needed[i] }).done(function (data) {
 
                 });
-            }                     
+            }
+            //console.log("habla: "+starting_station_id,destination_station_id);            
             $.post("/scheduler/get_route/", {
                 '_token': $('meta[name=csrf-token]').attr('content'),
                 'first_station_id': starting_station_id,
                 'last_station_id': destination_station_id,
             }).done(function (data) {
                 var route_id = data;
+            //console.log(order_id,train_id,route_id,time_span,current_shippping_date);
+                
                 $.post("/scheduler/create_shipment/", {
                     '_token': $('meta[name=csrf-token]').attr('content'),
                     'order_id': order_id,
@@ -220,18 +204,20 @@ window.processShipment = function () {
                     'departure': current_shippping_date,
                     'status': "1",
                 }).done(function (data) {
-                    console.log(data);
+                    //console.log(data);
                 });
             });
 
         });
     } 
 
-    var starting_station_id = $("#starting_station_id").text().split(':')[1];
+    //var starting_station_id = $("#starting_station_id").text().split(':')[1];
     //console.log(starting_station_id);
     var wagons = [];
     $.post("/scheduler/wagon/" + starting_station_id, { '_token': $('meta[name=csrf-token]').attr('content') }).done(function (data) {
         //console.log(Object.keys(data));
+        //console.log(data);
+
         Object.keys(data).forEach(function (item) {
             //console.log(data[item]['type_id']);
             if (data[item]['station_id'] != null) {
@@ -242,7 +228,7 @@ window.processShipment = function () {
         })
 
 
-        //console.log(wagons);
+        //console.log("wagons: " + wagons);
 
         var table_data = window.REDIPS.drag.saveContent('table1', 'plain').split('&');
         for (var i = 0; i < table_data.length; i++) {
@@ -279,7 +265,9 @@ window.processShipment = function () {
 
 
         }
-        console.log(shippin_dates);
+        //console.log(shippin_dates);
+       // console.log(orders_paired_to_station_flag);
+
         if (orders_paired_to_station_flag == 0) {
             for (var x = 0; x < shippin_dates.length; x++) {
                   
@@ -291,10 +279,11 @@ window.processShipment = function () {
                         ordered_quantities.push(table_data[i].split('_')[1]);
                     }
                 }
-                console.log(ordered_types);
-                console.log(ordered_quantities);
+                //console.log(ordered_types);
+                //console.log(ordered_quantities);
 
                 var station_capacity_per_type = [];
+                //console.log(wagons.length);
                 //sum wagon capacity using type id as the index
                 for (var i = 0; i < wagons.length; i++) {
                     var temp = wagons[i].split('_');
@@ -311,11 +300,15 @@ window.processShipment = function () {
 
                 }
                 //console.log(station_capacity_per_type);
+                //console.log(station_capacity_per_type);
                 var capacity_flag = 0;
                 var wagons_needed = [];
                 for (var i = 0; i < ordered_types.length; i++) {
                     if (station_capacity_per_type[ordered_types[i]] < ordered_quantities[i]) {
                         capacity_flag = 1;
+                        //console.log("types:"+ordered_types[i]);
+                        //console.log("menny:"+ordered_quantities[i]);
+
                     }
                     else {
                         var quantity_needed = ordered_quantities[i];
@@ -331,11 +324,11 @@ window.processShipment = function () {
 
 
                 }
-                console.log(wagons_needed);
+                //console.log("wagons neede: "+wagons_needed);
                 if (wagons_needed.length != 0) {
                     
-                    var order_id = $("#order_id").text().split(':')[1];
-                    var starting_station_id = $("#starting_station_id").text().split(':')[1];
+                    //var order_id = $("#order_id").text().split(':')[1];
+                    //var starting_station_id = $("#starting_station_id").text().split(':')[1];
                     var current_shippping_date = shippin_dates[x];
                     
                     shipment(wagons_needed,order_id,starting_station_id,destination_station_id,current_shippping_date,deadline);
@@ -360,6 +353,7 @@ window.processShipment = function () {
 
     //console.log(temp1);
 };
+/*
 window.refreshOpening=function(){
         // get target and source position (method returns positions as array)
         // pos[0] - target table index
@@ -381,12 +375,12 @@ window.refreshOpening=function(){
         let cells= $("#"+row_ids[current_row_pos]+" td");
         let source_cells=$("#"+row_ids[source_row_pos]+" td");
         let source_cell=source_cells[source_cell_pos-1];
-        let actual_cell =cells[current_cell_pos-1];
-        //console.log(actual_cell);
+        let actual_cell=cells[current_cell_pos-1];
+        console.log(actual_cell);
         let actual_cell_id=actual_cell.id;
-        //console.log(source_cell);
+        console.log(source_cell);
         let source_cell_id=source_cell.id;
-        if(actual_cell_id.split('_')[0] == "station")
+        if(actual_cell_id.split('_')[0] == "station" )
         {
         let actual_type=$("#"+actual_cell_id+" div").attr('id').split('_')[0];
         
@@ -416,6 +410,14 @@ window.refreshOpening=function(){
             {
                 adding.append("<div style='background-color:red;padding:3px;border:1px solid white'></div>");
             }
+            if(actual_type==3)
+            {
+                adding.append("<div style='background-color:green;padding:3px;border:1px solid white'></div>");
+            }
+            if(actual_type==4)
+            {
+                adding.append("<div style='background-color:purple;padding:3px;border:1px solid white'></div>");
+            }
         }
         
         }
@@ -426,7 +428,9 @@ window.refreshOpening=function(){
        //console.log(actual);
         //console.log(cells);
    
-}
+}*/
+
+/*
 window.onload = function () {
     rd = window.REDIPS.drag;	// reference to REDIPS.drag lib
 rd.init();
@@ -435,10 +439,10 @@ rd.mark.exceptionClass.type1 = 'type1';
 rd.mark.exceptionClass.type2 = 'type2';
 rd.mark.exceptionClass.type3 = 'type3';
 rd.mark.exceptionClass.type4 = 'type4';
-console.log("proba");       
+//console.log("proba");       
 // event handler called after DIV element is dropped to TD
 rd.event.dropped = function (targetCell) {
-    console.log("proba");
+    //console.log("proba");
     let divClass = rd.mark.exceptionClass; // DIV exception class
         
     // if the DIV element was dropped to allowed cell
@@ -452,7 +456,7 @@ rd.event.dropped = function (targetCell) {
         rd.enableDrag(false, rd.obj);
         
         
-            console.log("proba");
+            //console.log("proba");
         
     }
 };
@@ -468,4 +472,5 @@ window.attachEvent('onload', window.REDIPS.drag.init());
 //window.REDIPS.init();
 ////
 
+*/
 
